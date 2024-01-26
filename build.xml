@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+
+<project name="Project" default="jar" basedir=".">
+	<property name="src.dir" value="src"/>
+	<property name="classes.dir" value="classes"/>
+	<property name="lib.dir" value="lib"/>
+	
+	<target name="jar" depends="javadoc">
+		<jar destfile="Hanabi.jar" basedir="classes">
+			<zipfileset includes="**/*.class" src="lib/zen5.jar"/>
+			<manifest>
+				<attribute name="Main-Class" value="fr.umlv.hanabi.SimpleGameController"/>
+			</manifest>
+		</jar>
+	</target>
+	
+	<target name="compile" depends="clean">
+		<path id="classes">
+				<fileset dir="${lib.dir}">
+					<include name="*.jar"/>
+				</fileset>
+				<pathelement location="${classes.dir}"/>
+		</path>
+		
+		<javac srcdir="${src.dir}"
+					   destdir="${classes.dir}"
+						debug="on"
+						optimize="off"
+						includeantruntime = "false"
+						deprecation="on">
+					<classpath refid="classes"/>
+		</javac>
+	</target>
+	
+	<target name="javadoc" depends="compile">
+		<javadoc private="on" sourcepath="src"
+						destdir="docs/doc"
+					classpath="lib/zen5.jar">
+					<fileset dir="src" defaultexcludes="yes">
+						<include name="**"/>
+					</fileset>
+		</javadoc>
+	</target>
+	
+	<target name="clean">
+		<delete>
+		  <fileset dir="classes" includes="**/*.class"/>
+		  
+		  <fileset dir="." includes="Hanabi.jar"/>
+		</delete>
+	</target>
+	
+</project>
